@@ -1,182 +1,159 @@
-import java.util.ArrayList;
-import java.util.Collections;
-
-interface Payable {
-    double getPaymentAmount();
-}
-
-class Person implements Payable, Comparable<Person> {
-    private static int nextId = 1;
-
-    private final int id;
-    private String name;
-    private String surname;
-
-    public Person() {
-        this.id = nextId++;
-        this.name = "";
-        this.surname = "";
-    }
-
-    public Person(String name, String surname) {
-        this.id = nextId++;
-        this.name = name;
-        this.surname = surname;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-
-    public String getPosition() {
-        return "Student";
-    }
-
-    @Override
-    public double getPaymentAmount() {
-        return 0.0;
-    }
-
-    @Override
-    public String toString() {
-        return id + ". " + name + " " + surname;
-    }
-
-
-    @Override
-    public int compareTo(Person other) {
-        return Double.compare(this.getPaymentAmount(), other.getPaymentAmount());
-    }
-}
-
-class Employee extends Person {
-    private String position;
-    private double salary;
-
-    public Employee() {
-        super();
-        this.position = "";
-        this.salary = 0.0;
-    }
-
-    public Employee(String name, String surname, String position, double salary) {
-        super(name, surname);
-        this.position = position;
-        this.salary = salary;
-    }
-
-    public String getPositionValue() {
-        return position;
-    }
-
-    public void setPositionValue(String position) {
-        this.position = position;
-    }
-
-    public double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
-
-    @Override
-    public String getPosition() {
-        return position;
-    }
-
-    @Override
-    public double getPaymentAmount() {
-        return salary;
-    }
-
-    @Override
-    public String toString() {
-        return "Employee: " + super.toString();
-    }
-
-    @Override
-    public int compareTo(Person other) {
-        return Double.compare(this.getPaymentAmount(), other.getPaymentAmount());
-    }
-}
-
-class Student extends Person {
-    private double gpa;
-
-    private static final double STIPEND = 36660.00;
-    private static final double MIN_GPA_FOR_STIPEND = 2.67;
-
-    public Student() {
-        super();
-        this.gpa = 0.0;
-    }
-
-    public Student(String name, String surname, double gpa) {
-        super(name, surname);
-        this.gpa = gpa;
-    }
-
-    public double getGpa() {
-        return gpa;
-    }
-
-    public void setGpa(double gpa) {
-        this.gpa = gpa;
-    }
-
-    @Override
-    public double getPaymentAmount() {
-        return (gpa > MIN_GPA_FOR_STIPEND) ? STIPEND : 0.0;
-    }
-
-    @Override
-    public String toString() {
-        return "Student: " + super.toString();
-    }
-
-    @Override
-    public int compareTo(Person other) {
-        return Double.compare(this.getPaymentAmount(), other.getPaymentAmount());
-    }
-}
-
 public class Main {
-    public static void printData(Iterable<Person> people) {
-        for (Person p : people) {
-            System.out.printf("%s earns %.2f tenge%n", p.toString(), p.getPaymentAmount());
-        }
+    public static void main(String[] args) {
+        testArrayList();
+        testLinkedList();
+        testStack();
+        testQueue();
+        testMinHeap();
     }
 
-    public static void main(String[] args) {
-        ArrayList<Person> people = new ArrayList<>();
+    private static void testArrayList() {
+        System.out.println("=== MyArrayList ===");
+        MyArrayList<Integer> list = new MyArrayList<>();
 
+        list.add(10);
+        list.add(30);
+        list.addFirst(5);
+        list.add(1, 7);
+        list.addLast(40);
+        printIterable(list);
 
-        people.add(new Employee("John", "Lennon", "Manager", 27045.78));
-        people.add(new Employee("George", "Harrison", "Developer", 50000.00));
+        System.out.println("First: " + list.getFirst());
+        System.out.println("Last: " + list.getLast());
+        System.out.println("Get(2): " + list.get(2));
 
-        people.add(new Student("Ringo", "Starr", 2.50)); // no stipend
-        people.add(new Student("Paul", "McCartney", 3.20)); // stipend
+        list.set(2, 100);
+        printIterable(list);
 
-        Collections.sort(people);
-        printData(people);
+        list.removeFirst();
+        list.removeLast();
+        list.remove(1);
+        printIterable(list);
+
+        list.add(50);
+        list.add(20);
+        list.add(20);
+        list.sort();
+        printIterable(list);
+
+        System.out.println("indexOf(20): " + list.indexOf(20));
+        System.out.println("lastIndexOf(20): " + list.lastIndexOf(20));
+        System.out.println("exists(100): " + list.exists(100));
+        System.out.println("size: " + list.size());
+
+        Object[] arr = list.toArray();
+        System.out.print("toArray: ");
+        for (Object obj : arr) {
+            System.out.print(obj + " ");
+        }
+        System.out.println();
+
+        list.clear();
+        System.out.println("size after clear: " + list.size());
+        System.out.println();
+    }
+
+    private static void testLinkedList() {
+        System.out.println("=== MyLinkedList ===");
+        MyLinkedList<Integer> list = new MyLinkedList<>();
+
+        list.add(15);
+        list.add(25);
+        list.addFirst(5);
+        list.add(1, 10);
+        list.addLast(35);
+        printIterable(list);
+
+        System.out.println("First: " + list.getFirst());
+        System.out.println("Last: " + list.getLast());
+        System.out.println("Get(2): " + list.get(2));
+
+        list.set(2, 99);
+        printIterable(list);
+
+        list.removeFirst();
+        list.removeLast();
+        list.remove(1);
+        printIterable(list);
+
+        list.add(8);
+        list.add(3);
+        list.add(8);
+        list.sort();
+        printIterable(list);
+
+        System.out.println("indexOf(8): " + list.indexOf(8));
+        System.out.println("lastIndexOf(8): " + list.lastIndexOf(8));
+        System.out.println("exists(99): " + list.exists(99));
+        System.out.println("size: " + list.size());
+
+        Object[] arr = list.toArray();
+        System.out.print("toArray: ");
+        for (Object obj : arr) {
+            System.out.print(obj + " ");
+        }
+        System.out.println();
+
+        list.clear();
+        System.out.println("size after clear: " + list.size());
+        System.out.println();
+    }
+
+    private static void testStack() {
+        System.out.println("=== MyStack ===");
+        MyStack<Integer> stack = new MyStack<>();
+
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+
+        System.out.println("peek: " + stack.peek());
+        System.out.println("pop: " + stack.pop());
+        System.out.println("pop: " + stack.pop());
+        System.out.println("size: " + stack.size());
+        System.out.println("isEmpty: " + stack.isEmpty());
+        System.out.println();
+    }
+
+    private static void testQueue() {
+        System.out.println("=== MyQueue ===");
+        MyQueue<Integer> queue = new MyQueue<>();
+
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+
+        System.out.println("peek: " + queue.peek());
+        System.out.println("dequeue: " + queue.dequeue());
+        System.out.println("dequeue: " + queue.dequeue());
+        System.out.println("size: " + queue.size());
+        System.out.println("isEmpty: " + queue.isEmpty());
+        System.out.println();
+    }
+
+    private static void testMinHeap() {
+        System.out.println("=== MyMinHeap ===");
+        MyMinHeap<Integer> heap = new MyMinHeap<>();
+
+        heap.insert(40);
+        heap.insert(10);
+        heap.insert(30);
+        heap.insert(5);
+        heap.insert(20);
+
+        System.out.println("min: " + heap.getMin());
+        System.out.println("extractMin: " + heap.extractMin());
+        System.out.println("extractMin: " + heap.extractMin());
+        System.out.println("min now: " + heap.getMin());
+        System.out.println("size: " + heap.size());
+        System.out.println("isEmpty: " + heap.isEmpty());
+        System.out.println();
+    }
+
+    private static <T> void printIterable(Iterable<T> iterable) {
+        for (T item : iterable) {
+            System.out.print(item + " ");
+        }
+        System.out.println();
     }
 }
